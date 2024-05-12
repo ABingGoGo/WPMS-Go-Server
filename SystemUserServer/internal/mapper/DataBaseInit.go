@@ -18,13 +18,13 @@ func DataBaseMapperInit() {
 	var err error
 	Engine, err = xorm.NewEngine("mysql", dsn)
 	if err != nil {
-		logrus.Errorf("%s", "数据库连接字符串存在问题，请检查\n")
+		logrus.Errorf("%s", "[XORM] - 数据库连接字符串存在问题，请检查\n")
 	}
 	err = Engine.Ping()
 	if err != nil {
-		logrus.Errorf("%s", "数据库连接字符串没有问题，但无法建立数据库连接，请网络等相关问题\n")
+		logrus.Errorf("%s", "[XORM] - 数据库连接字符串没有问题，但无法建立数据库连接，请检查配置或网络等相关问题\n")
 	} else {
-		logrus.Info("数据库连接成功")
+		logrus.Info("[XORM] - 数据库连接成功")
 	}
 
 	Engine.ShowSQL(true)
