@@ -8,7 +8,7 @@ Server:
 # 数据库配置项
 DataBase:
   url: 101.201.174.45  # 数据库连接地址
-  port: 33061  # 数据库服务端口
+  port: 3306  # 数据库服务端口
   userName: root  # 连接数据库的用户名
   password: MaXiangBing@624  # 用户名对应的密码
   name: Las  # 数据库名称

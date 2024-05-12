@@ -25,6 +25,9 @@ func GinRouterInit() {
 		c.JSON(http.StatusOK, config.YamlConfig.Server.ApplicationName)
 	})
 
+	routerV1 := router.Group(config.YamlConfig.Server.Servlet.ContextPath + "/api/v1")
+	systemUserQueryRouter(routerV1)
+
 	routerRunTimeInit(router)
 }
 
