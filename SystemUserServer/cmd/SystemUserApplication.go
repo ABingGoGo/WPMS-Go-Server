@@ -7,5 +7,5 @@ import (
 
 func main() {
 	mapper.DataBaseMapperInit()
-	router.RouterInit()
+	router.GinRouterInit()
 }

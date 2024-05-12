@@ -14,34 +14,19 @@ import (
 
 const FilesNextName = ".log"
 
-func LogMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		start := time.Now()
-		urlPath := c.Request.URL.Path
-		raw := c.Request.URL.RawQuery
-
-		c.Next()
-
-		// Stop timer
-		end := time.Now()
-		timeSub := end.Sub(start)
-		clientIP := c.ClientIP()
-		method := c.Request.Method
-		statusCode := c.Writer.Status()
-		if raw != "" {
-			urlPath = urlPath + "?" + raw
-		}
-
-		logrus.Infof("[GIN]-time:%s StatusCode:%d ip:%s 耗时:%d 访问路径:%s 访问动作:%s",
-			start.Format("2006-01-02 15:04:06"),
-			statusCode,
-			clientIP,
-			timeSub,
-			urlPath,
-			method,
+func LoggerWithFormatter(params gin.LogFormatterParams) string {
+	go func() {
+		logStr := fmt.Sprintf(
+			"[ GIN ] - 返回状态码：%d | 访问ip：%s | 耗时：%s | 请求动作：%s | 请求地址：%s",
+			params.StatusCode,
+			params.ClientIP,
+			params.Latency,
+			params.Method,
+			params.Path,
 		)
-
-	}
+		logrus.Info(logStr)
+	}()
+	return ""
 }
 
 type MyFormatter struct {
@@ -96,6 +81,9 @@ func InitFile(logPath string) {
 		logrus.FatalLevel: writer(fmt.Sprintf("%s/%s", logPath, fileDate), "fatal" /*, 8*/),
 		logrus.PanicLevel: writer(fmt.Sprintf("%s/%s", logPath, fileDate), "panic" /*, 8*/),
 	}, &MyFormatter{})
-
+	// 设置logrus输出到控制台
+	logrus.SetOutput(os.Stdout)
 	logrus.AddHook(fileHoo)
+	// 开启日志显示调用者信息
+	logrus.SetReportCaller(true)
 }
